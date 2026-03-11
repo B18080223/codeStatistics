@@ -28,7 +28,9 @@ const props = defineProps<{
 const chartRef = ref<HTMLDivElement | null>(null)
 const chartInstance = shallowRef<echarts.ECharts | null>(null)
 
-const buildChartOption = (data: ProjectCommitData[]): echarts.EChartsCoreOption => {
+const buildChartOption = (
+  data: ProjectCommitData[]
+): echarts.EChartsCoreOption => {
   const seriesData = data.map(item => ({
     name: item.projectName,
     value: item.commitCount
@@ -38,9 +40,8 @@ const buildChartOption = (data: ProjectCommitData[]): echarts.EChartsCoreOption 
     tooltip: {
       trigger: 'item',
       appendToBody: true,
-      formatter: (params: any) => {
-        return `${params.name}<br/>提交次数：<b>${params.value}</b>（${params.percent}%）`
-      }
+      formatter: (params: any) =>
+        `${params.name}<br/>提交次数：<b>${params.value}</b>（${params.percent}%）`
     },
     legend: {
       orient: 'vertical',
@@ -66,13 +67,8 @@ const buildChartOption = (data: ProjectCommitData[]): echarts.EChartsCoreOption 
           borderColor: '#fff',
           borderWidth: 2
         },
-        label: {
-          show: false
-        },
-        emphasis: {
-          scale: true,
-          scaleSize: 6
-        },
+        label: { show: false },
+        emphasis: { scale: true, scaleSize: 6 },
         data: seriesData
       }
     ]
@@ -105,62 +101,28 @@ watch(() => props.data, updateChart, { deep: true })
 </script>
 
 <template>
-  <div class="project-pie-chart">
-    <h3 class="project-pie-chart__title">项目分布</h3>
-    <template v-if="loading">
-      <div class="project-pie-chart__skeleton" />
+  <el-card shadow="hover">
+    <template #header>
+      <span class="chart-title">项目分布</span>
     </template>
-    <template v-else>
-      <div ref="chartRef" class="project-pie-chart__canvas" />
-    </template>
-  </div>
+    <el-skeleton v-if="loading" :rows="8" animated />
+    <div v-else ref="chartRef" class="chart-canvas" />
+  </el-card>
 </template>
 
 <style scoped>
-.project-pie-chart {
-  padding: 20px;
-  background: #fff;
-  border: 1px solid #e4e7ed;
-  border-radius: 8px;
-}
-
-.project-pie-chart__title {
-  margin: 0 0 16px;
+.chart-title {
   font-size: 16px;
   font-weight: 600;
-  color: #303133;
 }
 
-.project-pie-chart__canvas {
+.chart-canvas {
   width: 100%;
   height: 360px;
-}
-
-.project-pie-chart__skeleton {
-  width: 100%;
-  height: 360px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  border-radius: 4px;
-  animation: skeleton-pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes skeleton-pulse {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
 }
 
 @media (max-width: 767px) {
-  .project-pie-chart {
-    padding: 16px;
-  }
-
-  .project-pie-chart__canvas,
-  .project-pie-chart__skeleton {
+  .chart-canvas {
     height: 260px;
   }
 }

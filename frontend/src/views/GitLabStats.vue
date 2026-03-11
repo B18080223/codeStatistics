@@ -40,26 +40,34 @@ const formatTime = (iso: string): string => {
           <span v-if="lastUpdated" class="gitlab-stats__updated">
             最后更新：{{ formatTime(lastUpdated) }}
           </span>
-          <button
-            class="gitlab-stats__refresh-btn"
-            :disabled="isLoading"
+          <el-button
+            type="primary"
+            :loading="isLoading"
             @click="refreshData"
           >
             {{ isLoading ? '刷新中...' : '刷新数据' }}
-          </button>
+          </el-button>
         </div>
       </div>
 
-      <div v-if="errorMessage" class="gitlab-stats__error">
-        <span class="gitlab-stats__error-text">{{ errorMessage }}</span>
-        <button
-          v-if="canRetry"
-          class="gitlab-stats__retry-btn"
-          @click="refreshData"
-        >
-          重试
-        </button>
-      </div>
+      <el-alert
+        v-if="errorMessage"
+        :title="errorMessage"
+        type="error"
+        show-icon
+        :closable="false"
+      >
+        <template v-if="canRetry" #default>
+          <el-button
+            type="danger"
+            size="small"
+            plain
+            @click="refreshData"
+          >
+            重试
+          </el-button>
+        </template>
+      </el-alert>
 
       <DateRangeSelector
         :start-date="dateRange.startDate"
@@ -75,16 +83,20 @@ const formatTime = (iso: string): string => {
         :loading="isLoading"
       />
 
-      <div class="gitlab-stats__charts">
-        <CommitLineChart
-          :data="statsData?.dailyCommits ?? []"
-          :loading="isLoading"
-        />
-        <ProjectDistribution
-          :data="statsData?.projectCommits ?? []"
-          :loading="isLoading"
-        />
-      </div>
+      <el-row :gutter="20">
+        <el-col :xs="24" :lg="12">
+          <CommitLineChart
+            :data="statsData?.dailyCommits ?? []"
+            :loading="isLoading"
+          />
+        </el-col>
+        <el-col :xs="24" :lg="12">
+          <ProjectDistribution
+            :data="statsData?.projectCommits ?? []"
+            :loading="isLoading"
+          />
+        </el-col>
+      </el-row>
     </template>
   </div>
 </template>
@@ -132,77 +144,6 @@ const formatTime = (iso: string): string => {
   color: #909399;
 }
 
-.gitlab-stats__refresh-btn {
-  padding: 8px 16px;
-  font-size: 14px;
-  color: #fff;
-  background-color: #409eff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.gitlab-stats__refresh-btn:hover {
-  background-color: #66b1ff;
-}
-
-.gitlab-stats__refresh-btn:disabled {
-  background-color: #a0cfff;
-  cursor: not-allowed;
-}
-
-.gitlab-stats__error {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background-color: #fef0f0;
-  border: 1px solid #fbc4c4;
-  border-radius: 4px;
-}
-
-.gitlab-stats__error-text {
-  flex: 1;
-  font-size: 14px;
-  color: #f56c6c;
-}
-
-.gitlab-stats__retry-btn {
-  padding: 6px 14px;
-  font-size: 13px;
-  color: #f56c6c;
-  background: #fff;
-  border: 1px solid #f56c6c;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.gitlab-stats__retry-btn:hover {
-  color: #fff;
-  background-color: #f56c6c;
-}
-
-.gitlab-stats__charts {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-/* Tablet: 768px - 1024px */
-@media (max-width: 1024px) {
-  .gitlab-stats {
-    padding: 20px;
-    gap: 16px;
-  }
-
-  .gitlab-stats__charts {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Mobile: < 768px */
 @media (max-width: 767px) {
   .gitlab-stats {
     padding: 16px;
@@ -225,20 +166,6 @@ const formatTime = (iso: string): string => {
   .gitlab-stats__actions {
     width: 100%;
     justify-content: space-between;
-  }
-
-  .gitlab-stats__error {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .gitlab-stats__retry-btn {
-    align-self: flex-end;
-  }
-
-  .gitlab-stats__charts {
-    grid-template-columns: 1fr;
-    gap: 14px;
   }
 }
 </style>

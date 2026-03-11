@@ -26,7 +26,9 @@ const props = defineProps<{
 const chartRef = ref<HTMLDivElement | null>(null)
 const chartInstance = shallowRef<echarts.ECharts | null>(null)
 
-const buildChartOption = (data: DailyCommitData[]): echarts.EChartsCoreOption => {
+const buildChartOption = (
+  data: DailyCommitData[]
+): echarts.EChartsCoreOption => {
   const dates = data.map(item => item.date)
   const counts = data.map(item => item.count)
 
@@ -48,24 +50,14 @@ const buildChartOption = (data: DailyCommitData[]): echarts.EChartsCoreOption =>
       type: 'category',
       boundaryGap: false,
       data: dates,
-      axisLabel: {
-        fontSize: 12,
-        color: '#909399'
-      },
-      axisLine: {
-        lineStyle: { color: '#e4e7ed' }
-      }
+      axisLabel: { fontSize: 12, color: '#909399' },
+      axisLine: { lineStyle: { color: '#e4e7ed' } }
     },
     yAxis: {
       type: 'value',
       minInterval: 1,
-      axisLabel: {
-        fontSize: 12,
-        color: '#909399'
-      },
-      splitLine: {
-        lineStyle: { color: '#e4e7ed', type: 'dashed' }
-      }
+      axisLabel: { fontSize: 12, color: '#909399' },
+      splitLine: { lineStyle: { color: '#e4e7ed', type: 'dashed' } }
     },
     series: [
       {
@@ -113,62 +105,28 @@ watch(() => props.data, updateChart, { deep: true })
 </script>
 
 <template>
-  <div class="commit-line-chart">
-    <h3 class="commit-line-chart__title">提交趋势</h3>
-    <template v-if="loading">
-      <div class="commit-line-chart__skeleton" />
+  <el-card shadow="hover">
+    <template #header>
+      <span class="chart-title">提交趋势</span>
     </template>
-    <template v-else>
-      <div ref="chartRef" class="commit-line-chart__canvas" />
-    </template>
-  </div>
+    <el-skeleton v-if="loading" :rows="8" animated />
+    <div v-else ref="chartRef" class="chart-canvas" />
+  </el-card>
 </template>
 
 <style scoped>
-.commit-line-chart {
-  padding: 20px;
-  background: #fff;
-  border: 1px solid #e4e7ed;
-  border-radius: 8px;
-}
-
-.commit-line-chart__title {
-  margin: 0 0 16px;
+.chart-title {
   font-size: 16px;
   font-weight: 600;
-  color: #303133;
 }
 
-.commit-line-chart__canvas {
+.chart-canvas {
   width: 100%;
   height: 360px;
-}
-
-.commit-line-chart__skeleton {
-  width: 100%;
-  height: 360px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  border-radius: 4px;
-  animation: skeleton-pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes skeleton-pulse {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
 }
 
 @media (max-width: 767px) {
-  .commit-line-chart {
-    padding: 16px;
-  }
-
-  .commit-line-chart__canvas,
-  .commit-line-chart__skeleton {
+  .chart-canvas {
     height: 260px;
   }
 }
