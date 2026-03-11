@@ -8,6 +8,7 @@ import {
   LegendComponent
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
+import { LabelLayout } from 'echarts/features'
 import type { ProjectCommitData } from '@/types/gitlab'
 
 echarts.use([
@@ -15,6 +16,7 @@ echarts.use([
   TitleComponent,
   TooltipComponent,
   LegendComponent,
+  LabelLayout,
   CanvasRenderer
 ])
 
@@ -35,6 +37,7 @@ const buildChartOption = (data: ProjectCommitData[]): echarts.EChartsCoreOption 
   return {
     tooltip: {
       trigger: 'item',
+      appendToBody: true,
       formatter: (params: any) => {
         return `${params.name}<br/>提交次数：<b>${params.value}</b>（${params.percent}%）`
       }
@@ -43,16 +46,20 @@ const buildChartOption = (data: ProjectCommitData[]): echarts.EChartsCoreOption 
       orient: 'vertical',
       right: '5%',
       top: 'center',
+      type: 'scroll',
       textStyle: {
         fontSize: 12,
-        color: '#606266'
+        color: '#606266',
+        width: 120,
+        overflow: 'truncate',
+        ellipsis: '...'
       }
     },
     series: [
       {
         type: 'pie',
         radius: ['40%', '70%'],
-        center: ['40%', '50%'],
+        center: ['30%', '50%'],
         avoidLabelOverlap: true,
         itemStyle: {
           borderRadius: 6,
@@ -63,11 +70,8 @@ const buildChartOption = (data: ProjectCommitData[]): echarts.EChartsCoreOption 
           show: false
         },
         emphasis: {
-          label: {
-            show: true,
-            fontSize: 14,
-            fontWeight: 'bold'
-          }
+          scale: true,
+          scaleSize: 6
         },
         data: seriesData
       }

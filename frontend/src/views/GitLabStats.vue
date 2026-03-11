@@ -3,7 +3,7 @@ import ConfigForm from '@/components/gitlab-stats/ConfigForm.vue'
 import DateRangeSelector from '@/components/gitlab-stats/DateRangeSelector.vue'
 import StatsOverview from '@/components/gitlab-stats/StatsOverview.vue'
 import CommitLineChart from '@/components/gitlab-stats/CommitLineChart.vue'
-import ProjectPieChart from '@/components/gitlab-stats/ProjectPieChart.vue'
+import ProjectDistribution from '@/components/gitlab-stats/ProjectDistribution.vue'
 import { useGitLabStats } from '@/hooks/useGitLabStats'
 
 const {
@@ -80,7 +80,7 @@ const formatTime = (iso: string): string => {
           :data="statsData?.dailyCommits ?? []"
           :loading="isLoading"
         />
-        <ProjectPieChart
+        <ProjectDistribution
           :data="statsData?.projectCommits ?? []"
           :loading="isLoading"
         />
@@ -91,7 +91,7 @@ const formatTime = (iso: string): string => {
 
 <style scoped>
 .gitlab-stats {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 24px;
   display: flex;
