@@ -121,7 +121,7 @@ public class GitLabController {
 
         return CommitStatsResponse.builder()
                 .totalCommits(stats.getTotalCommits())
-                .activeDays(stats.getActiveDays())
+                .totalChanges(stats.getTotalChanges())
                 .avgDailyCommits(stats.getAvgDailyCommits())
                 .projectCount(stats.getProjectCount())
                 .dailyCommits(dailyCommits)

@@ -29,4 +29,8 @@ public class CommitRecord {
     private Long projectId;
 
     private String projectName;
+
+    private int additions;
+
+    private int deletions;
 }

@@ -15,7 +15,7 @@ public class CommitStats {
 
     private int totalCommits;
 
-    private int activeDays;
+    private int totalChanges;
 
     private double avgDailyCommits;
 

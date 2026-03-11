@@ -69,7 +69,7 @@ const formatTime = (iso: string): string => {
 
       <StatsOverview
         :total-commits="statsData?.totalCommits ?? 0"
-        :active-days="statsData?.activeDays ?? 0"
+        :total-changes="statsData?.totalChanges ?? 0"
         :avg-daily-commits="statsData?.avgDailyCommits ?? 0"
         :project-count="statsData?.projectCount ?? 0"
         :loading="isLoading"

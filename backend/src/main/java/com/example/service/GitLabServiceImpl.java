@@ -186,6 +186,10 @@ public class GitLabServiceImpl implements GitLabService {
         record.setCommittedDate(parseCommittedDate(response.getCommittedDate()));
         record.setProjectId(project.getId());
         record.setProjectName(project.getName());
+        if (response.getStats() != null) {
+            record.setAdditions(response.getStats().getAdditions());
+            record.setDeletions(response.getStats().getDeletions());
+        }
         return record;
     }
 
@@ -232,14 +236,17 @@ public class GitLabServiceImpl implements GitLabService {
         CommitStats stats = new CommitStats();
         stats.setTotalCommits(commits.size());
 
-        // 计算活跃天数：有提交的唯一日期数
+        // 计算代码修改量（additions + deletions）
+        int totalChanges = commits.stream()
+                .mapToInt(c -> c.getAdditions() + c.getDeletions())
+                .sum();
+        stats.setTotalChanges(totalChanges);
+
+        // 计算平均每日提交数
         long activeDays = commits.stream()
                 .map(c -> c.getCommittedDate().toLocalDate())
                 .distinct()
                 .count();
-        stats.setActiveDays((int) activeDays);
-
-        // 计算平均每日提交数
         if (activeDays > 0) {
             stats.setAvgDailyCommits((double) commits.size() / activeDays);
         } else {

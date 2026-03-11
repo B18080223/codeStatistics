@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   totalCommits: number
-  activeDays: number
+  totalChanges: number
   avgDailyCommits: number
   projectCount: number
   loading?: boolean
@@ -9,7 +9,7 @@ defineProps<{
 
 const cards = [
   { key: 'totalCommits', label: '总提交次数', icon: '📝' },
-  { key: 'activeDays', label: '活跃天数', icon: '📅' },
+  { key: 'totalChanges', label: '代码修改量', icon: '💻' },
   { key: 'avgDailyCommits', label: '平均每日提交', icon: '📊' },
   { key: 'projectCount', label: '项目数量', icon: '📁' }
 ] as const

@@ -136,6 +136,7 @@ public class GitLabApiClient {
                     .queryParam("author", username)
                     .queryParam("since", since.toString() + "T00:00:00Z")
                     .queryParam("until", until.plusDays(1).toString() + "T00:00:00Z")
+                    .queryParam("with_stats", true)
                     .queryParam("per_page", PER_PAGE)
                     .queryParam("page", page)
                     .buildAndExpand(projectId)
