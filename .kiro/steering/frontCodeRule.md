@@ -410,25 +410,72 @@ const mockFn = vi.fn().mockResolvedValue({ data: [] })
 
 ### E2E 测试规范
 
+#### 核心原则：一场景一文件一视频
+
+- 一个测试场景对应一个测试文件（`*.spec.ts`）
+- 一个测试文件内只包含一个 `test()` 块，将该场景的所有步骤串行执行
+- 运行后产出一个测试结果、一个录屏视频（`.webm`）
+- 禁止在同一文件中使用多个 `test()` 拆分步骤（会生成多个视频）
+
+#### 文件命名
+
+- 以测试场景命名，使用 camelCase：`connectConfigTest.spec.ts`、`commitStatsQuery.spec.ts`
+- 文件名应能直接反映测试的功能模块
+
+#### 文件头部注释
+
+每个 E2E 测试文件必须包含 JSDoc 头部注释，说明：
+
+```typescript
+/**
+ * [场景名称] - E2E 测试
+ *
+ * 测试范围：[简要描述测试覆盖的功能]
+ * 测试方式：所有步骤串行在同一个 test 中执行，生成一个测试结果和一个录屏视频
+ *
+ * 覆盖步骤：
+ *  1. [步骤描述]
+ *  2. [步骤描述]
+ *  ...
+ *
+ * 运行命令：npx playwright test e2e/[文件名] --headed --workers=1
+ * 录屏输出：frontend/test-results/ 目录下的 video.webm
+ */
+```
+
 #### 基本结构
 
 ```typescript
 import { test, expect } from '@playwright/test'
 
-test.describe('功能模块名称', () => {
-  test('应完成核心用户流程', async ({ page }) => {
-    await page.goto('/')
-    await page.getByRole('button', { name: '提交' }).click()
-    await expect(page.getByText('提交成功')).toBeVisible()
-  })
+const SLOW = 800
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+test('场景名称', async ({ page }) => {
+  // ---- 步骤1：描述 ----
+  await page.goto('/')
+  await wait(SLOW)
+  // 断言...
+
+  // ---- 步骤2：描述 ----
+  await page.getByRole('button', { name: '提交' }).click()
+  await wait(SLOW)
+  await expect(page.getByText('提交成功')).toBeVisible()
+  await wait(SLOW)
 })
 ```
+
+#### 录屏与交互速度
+
+- `playwright.config.ts` 中配置 `video: 'on'` 以开启录屏
+- 步骤之间使用 `wait(SLOW)`（建议 800ms）控制交互节奏，确保录屏可读
+- 运行命令使用 `--headed --workers=1` 以可视化方式串行执行
 
 #### E2E 测试要点
 
 - 优先使用语义化选择器：`getByRole`、`getByText`、`getByLabel`
 - 避免使用 CSS 选择器或 XPath
-- 每个测试用例保持独立，不依赖其他用例的执行顺序
+- 每个测试文件保持独立，不依赖其他文件的执行顺序
 - 关注核心用户流程，不要测试实现细节
 
 ### 测试最佳实践
