@@ -35,7 +35,7 @@ export interface CommitRecord {
 /** 统计汇总数据 */
 export interface CommitStats {
   totalCommits: number
-  activeDays: number
+  totalChanges: number
   avgDailyCommits: number
   projectCount: number
   dailyCommits: DailyCommitData[]
