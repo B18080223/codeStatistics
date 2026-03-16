@@ -12,6 +12,11 @@ export const saveGitLabConfig = (config: GitLabConfig) => {
   return post<ConfigResponse>('/api/gitlab/config', config)
 }
 
+/** 查询 GitLab 配置状态 */
+export const getConfigStatus = () => {
+  return get<ConfigResponse>('/api/gitlab/config/status')
+}
+
 /** 获取提交记录列表 */
 export const getCommitList = (params: DateRangeParams) => {
   return get<CommitRecord[]>('/api/gitlab/commits', params)

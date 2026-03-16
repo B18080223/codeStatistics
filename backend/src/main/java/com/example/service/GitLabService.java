@@ -43,6 +43,13 @@ public interface GitLabService {
     CommitStats getStats(LocalDate startDate, LocalDate endDate);
 
     /**
+     * 检查 GitLab 配置是否已存在
+     *
+     * @return true 表示已配置
+     */
+    boolean isConfigured();
+
+    /**
      * 刷新缓存数据，清除所有已缓存的提交记录和统计数据
      */
     void refreshCache();

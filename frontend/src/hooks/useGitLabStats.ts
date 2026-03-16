@@ -1,5 +1,5 @@
 import { ref, reactive } from 'vue'
-import { getCommitStats } from '@/services/gitlabService'
+import { getCommitStats, getConfigStatus } from '@/services/gitlabService'
 import { getDefaultDateRange } from '@/const/gitlabStats'
 import type { CommitStats, DateRangeParams } from '@/types/gitlab'
 
@@ -11,6 +11,19 @@ export const useGitLabStats = () => {
   const lastUpdated = ref('')
   const isConfigured = ref(false)
   const dateRange = reactive<DateRangeParams>(getDefaultDateRange())
+
+  /** 页面加载时检查后端配置状态，已配置则直接拉取数据 */
+  const checkConfig = async () => {
+    try {
+      const res = await getConfigStatus()
+      if (res.success) {
+        isConfigured.value = true
+        await fetchStats()
+      }
+    } catch {
+      // 后端未启动或接口不存在，忽略，停留在配置页
+    }
+  }
 
   const fetchStats = async () => {
     isLoading.value = true
@@ -35,7 +48,6 @@ export const useGitLabStats = () => {
         errorMessage.value = '获取数据失败，请稍后重试'
         canRetry.value = true
       }
-      // 保留之前的数据
     } finally {
       isLoading.value = false
     }
@@ -64,6 +76,7 @@ export const useGitLabStats = () => {
     lastUpdated,
     isConfigured,
     dateRange,
+    checkConfig,
     fetchStats,
     refreshData,
     handleConfigSuccess,
