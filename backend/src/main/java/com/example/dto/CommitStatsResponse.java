@@ -16,7 +16,7 @@ import java.util.List;
 public class CommitStatsResponse {
 
     private int totalCommits;
-    private int activeDays;
+    private int totalChanges;
     private double avgDailyCommits;
     private int projectCount;
     private List<DailyCommitDTO> dailyCommits;

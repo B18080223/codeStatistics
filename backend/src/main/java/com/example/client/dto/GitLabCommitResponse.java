@@ -29,4 +29,18 @@ public class GitLabCommitResponse {
 
     @JsonProperty("committed_date")
     private String committedDate;
+
+    private Stats stats;
+
+    /**
+     * GitLab commit stats（additions/deletions/total）
+     */
+    @Getter
+    @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Stats {
+        private int additions;
+        private int deletions;
+        private int total;
+    }
 }
