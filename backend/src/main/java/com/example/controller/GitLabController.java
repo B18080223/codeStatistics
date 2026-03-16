@@ -60,6 +60,20 @@ public class GitLabController {
     }
 
     /**
+     * 查询当前 GitLab 配置状态
+     *
+     * @return 配置状态
+     */
+    @GetMapping("/config/status")
+    public ResponseEntity<ConfigResponse> getConfigStatus() {
+        boolean configured = gitLabService.isConfigured();
+        return ResponseEntity.ok(ConfigResponse.builder()
+                .success(configured)
+                .message(configured ? "已配置" : "未配置")
+                .build());
+    }
+
+    /**
      * 获取提交记录列表
      *
      * @param startDate 开始日期（yyyy-MM-dd 格式）

@@ -144,6 +144,11 @@ public class GitLabServiceImpl implements GitLabService {
         return calculateStats(commits);
     }
 
+    @Override
+    public boolean isConfigured() {
+        return currentConfig != null;
+    }
+
     /**
      * 刷新缓存数据，清除所有已缓存的提交记录和统计数据
      */

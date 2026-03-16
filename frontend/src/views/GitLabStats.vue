@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import ConfigForm from '@/components/gitlab-stats/ConfigForm.vue'
 import DateRangeSelector from '@/components/gitlab-stats/DateRangeSelector.vue'
 import StatsOverview from '@/components/gitlab-stats/StatsOverview.vue'
@@ -14,10 +15,15 @@ const {
   lastUpdated,
   isConfigured,
   dateRange,
+  checkConfig,
   refreshData,
   handleConfigSuccess,
   handleDateRangeChange
 } = useGitLabStats()
+
+onMounted(() => {
+  checkConfig()
+})
 
 const formatTime = (iso: string): string => {
   if (!iso) return ''
@@ -88,6 +94,8 @@ const formatTime = (iso: string): string => {
           <CommitLineChart
             :data="statsData?.dailyCommits ?? []"
             :loading="isLoading"
+            :start-date="dateRange.startDate"
+            :end-date="dateRange.endDate"
           />
         </el-col>
         <el-col :xs="24" :lg="12">
