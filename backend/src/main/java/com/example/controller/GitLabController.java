@@ -126,6 +126,8 @@ public class GitLabController {
                 .committedDate(record.getCommittedDate())
                 .projectId(record.getProjectId())
                 .projectName(record.getProjectName())
+                .additions(record.getAdditions())
+                .deletions(record.getDeletions())
                 .build();
     }
 
