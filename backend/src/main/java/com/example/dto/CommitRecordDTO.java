@@ -23,4 +23,6 @@ public class CommitRecordDTO {
     private LocalDateTime committedDate;
     private Long projectId;
     private String projectName;
+    private int additions;
+    private int deletions;
 }

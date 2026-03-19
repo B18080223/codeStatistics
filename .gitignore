@@ -12,6 +12,10 @@ frontend/dist/
 frontend/dist-ssr/
 frontend/*.local
 
+# React sub-app
+react-app/node_modules/
+react-app/dist/
+
 # IDE
 .idea/
 .vscode/
