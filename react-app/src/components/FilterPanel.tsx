@@ -78,22 +78,13 @@ const FilterPanel = ({
           />
         </Space>
 
-        {/* 查询按钮：提交日期范围 */}
-        <Button
-          type="primary"
-          icon={<SearchOutlined />}
-          onClick={handleQuery}
-        >
-          查询
-        </Button>
-
         {/* 项目筛选下拉（实时生效） */}
         <Select
           value={selectedProject || undefined}
           placeholder="全部项目"
           allowClear
           onChange={(val) => onProjectChange(val ?? '')}
-          style={{ minWidth: 160 }}
+          style={{ minWidth: 240 }}
           options={projects.map(p => ({ label: p, value: p }))}
         />
 
@@ -106,6 +97,14 @@ const FilterPanel = ({
           style={{ minWidth: 140 }}
           options={authors.map(a => ({ label: a, value: a }))}
         />
+         {/* 查询按钮：提交日期范围 */}
+        <Button
+          type="primary"
+          icon={<SearchOutlined />}
+          onClick={handleQuery}
+        >
+          查询
+        </Button>
       </Space>
     </Card>
   )
